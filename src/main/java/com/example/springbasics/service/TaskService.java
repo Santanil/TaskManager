@@ -31,18 +31,22 @@ public class TaskService {
 
     public Task createTask(String title,String desc,String dueDate){
         //TODO: Ensure date is not before today
-        var newTask=new Task(taskId.incrementAndGet(), title,desc,dueDate);
+        var newTask=new Task(taskId.getAndIncrement(), title,desc,dueDate);
         taskList.add(newTask);
         return newTask;
     }
 
     public Task getTask(Integer id){
-        for(int i=0;i<taskList.size();i++){
-            if(taskList.get(i).getTaskId().equals(id)){
-                return taskList.get(i);
+        Task curTask=null;
+        for(int i=0;i<taskList.size();i++) {
+            if (taskList.get(i).getTaskId().equals(id)) {
+                curTask = taskList.get(i);
+                return curTask;
             }
         }
-        return null;
+        if(curTask==null)
+            throw new TaskNotFoundException(id);
+        return curTask;
     }
 
     public Task updateTask(Integer id,String title,String desc,String date){
